@@ -51,18 +51,19 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
           authorId = profile.id;
         }
       }
-
       const { data: post, error } = await supabase
-        .from('posts')
-        .insert({
-          content: postContent,
-          author_id: authorId,
-          created_at: new Date().toISOString(),
-          tags: [],
-          is_anonymous: isAnonymous,
-        })
-        .select()
-        .single();
+      .from("posts")
+      .insert({
+        content: postContent,
+        author_id: authorId,
+        created_at: new Date().toISOString(),
+        tags: [],
+        is_anonymous: isAnonymous,
+        category: "discussion", // ✅ ADDED REQUIRED FIELD
+      })
+      .select()
+      .single();
+    
 
       if (error) throw error;
 
