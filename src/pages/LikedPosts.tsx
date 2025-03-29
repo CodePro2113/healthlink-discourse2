@@ -1,11 +1,17 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import MainLayout from '@/components/layout/MainLayout';
 import PostCardWrapper from '@/components/feed/PostCardWrapper';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from '@/components/ui/pagination';
 import { Post } from '@/components/feed/PostCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { Heart } from 'lucide-react';
@@ -30,7 +36,6 @@ const LikedPosts = () => {
     }
   }, [user, currentPage]);
 
-  
   const fetchLikedPosts = async () => {
     try {
       setIsLoading(true);
@@ -74,29 +79,12 @@ const LikedPosts = () => {
 
       setLikedPosts(posts);
     } catch (err: any) {
-      console.error("Failed to fetch liked posts:", err);
+      console.error("Error fetching liked posts:", err);
+      setError("Failed to load liked posts. Please try again later.");
       toast({
-        title: "Error loading liked posts",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-        });
-      
-      console.log('Formatted posts:', formattedPosts);
-      setLikedPosts(formattedPosts);
-    } catch (err) {
-      console.error('Error fetching liked posts:', err);
-      setError('Failed to load liked posts. Please try again later.');
-      toast({
-        title: 'Error',
-        description: 'Failed to load liked posts. Please try again later.',
-        variant: 'destructive'
+        title: "Error",
+        description: "Failed to load liked posts. Please try again later.",
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
@@ -116,15 +104,15 @@ const LikedPosts = () => {
       <Pagination className="mt-6">
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious 
-              onClick={() => handlePageChange(currentPage - 1)} 
+            <PaginationPrevious
+              onClick={() => handlePageChange(currentPage - 1)}
               className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
             />
           </PaginationItem>
-          
+
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
             <PaginationItem key={page}>
-              <PaginationLink 
+              <PaginationLink
                 isActive={page === currentPage}
                 onClick={() => handlePageChange(page)}
                 className="cursor-pointer"
@@ -133,10 +121,10 @@ const LikedPosts = () => {
               </PaginationLink>
             </PaginationItem>
           ))}
-          
+
           <PaginationItem>
-            <PaginationNext 
-              onClick={() => handlePageChange(currentPage + 1)} 
+            <PaginationNext
+              onClick={() => handlePageChange(currentPage + 1)}
               className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
             />
           </PaginationItem>
@@ -178,7 +166,7 @@ const LikedPosts = () => {
     <MainLayout>
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         <h1 className="text-2xl font-bold mb-6">Liked Posts</h1>
-        
+
         {isLoading ? renderLoadingState() : (
           <>
             {error ? (
